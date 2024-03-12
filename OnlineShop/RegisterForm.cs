@@ -30,7 +30,8 @@ namespace OnlineShop {
             registerUser();
         }
         private bool doesAlreadyExist(string login) {
-            con.Open();
+            if(con.State != ConnectionState.Open)
+                con.Open();
             string queryString = "SELECT COUNT(*) FROM customers WHERE login = @login";
             using(MySqlCommand cmd = new MySqlCommand(queryString, con)) {
                 cmd.Parameters.AddWithValue("@login", textBox1.Text);
@@ -52,7 +53,6 @@ namespace OnlineShop {
                     cmd.Parameters.AddWithValue("@password", textBox3.Text);
 
                     try {
-                        con.Open();
                         cmd.ExecuteNonQuery();
                         MessageBox.Show("You were succesfully registered");
                     }
@@ -61,6 +61,13 @@ namespace OnlineShop {
                     }
                 }
             }
+        }
+
+        private void label6_Click(object sender, EventArgs e) {
+            LoginForm loginForm = new LoginForm();
+            this.Hide();
+            loginForm.ShowDialog();
+            this.Close();
         }
     }
 }
